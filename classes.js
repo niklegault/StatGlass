@@ -43,26 +43,69 @@ class Goalie {
     }
 
     // Setters
-    
+    /*set shotsVS(shots) {
+        for(period in shots) {
+            this._shotsVS += period;
+        }
+    }
+    */
 
     // Functions
     addGame(gameToAdd) {
-        this.games.push(gameToAdd);
-
+        this._games.push(gameToAdd);
+        //shotsVS(gameToAdd.shotsVS);
+        for(let period in gameToAdd.shotsVS) {
+            this._shotsVS += period;
+        }
     }
 
     
 }
 
-// Game Class is used to store data about the teams playing, the goalie (can be both teams), and the amount of shots, and goals per period of play
+// Game Class is used to store data about the teams playing, the goalie, and the amount of shots, and goals per period of play
 class Game {
-    constructor(homeTeam, awayTeam, homeGoalie, homeBackup, awayGoalie, awayBackup) {
-        this.homeTeam    = homeTeam;
-        this.awayTeam    = awayTeam;
-        this.homeGoalie  = homeGoalie;
-        this.homeBackup  = homeBackup;
-        this.awayGoalie  = awayGoalie;
-        this.awayBackup  = awayBackup;
+    constructor(homeTeam, awayTeam, homeGoalie, homeBackup, periods) {
+        this._homeTeam    = homeTeam;
+        this._awayTeam    = awayTeam;
+        this._homeGoalie  = homeGoalie;
+        this._homeBackup  = homeBackup;
+        this._curPeriod   = 1;
+        this._shotsFor    = [];
+        this._shotsVS     = [];
+        this._goalsFor    = [];
+        this._goalsVS     = [];
+        for(let i = 0; i < periods; i++) {
+            this._shotsVS.push(0);
+            this._shotsFor.push(0);
+            this._goalsVS.push(0);
+            this._goalsFor.push(0);
+        }
+    }
+
+    // Getters
+    get shotsFor() {
+        return this._shotsFor;
+    }
+
+    get shotsVS() {
+        return this._shotsVS;
+    }
+
+    get goalsFor() {
+        return this._goalsFor;
+    }
+
+    get goalsVS() {
+        return this._goalsVS;
+    }
+
+    // Functions
+    addShotsFor() {
+        this._shotsFor[this._curPeriod - 1] ++;
+    }
+
+    addShotsVS() {
+        this._shotsVS[this._curPeriod - 1] ++;
     }
 }
 

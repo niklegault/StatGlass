@@ -2,3 +2,14 @@
 // Import all classes
 const classes = require("./classes")
 
+
+////// TESTING \\\\\\
+let will = new classes.Goalie('Will', 'Legault', 13)
+let test = new classes.Game('knights', 'celtics', will, null, 3);
+
+test.addShotsVS();
+test.addShotsVS();
+test.addShotsVS();
+
+will.addGame(test);
+console.log(will.shotsVS);
