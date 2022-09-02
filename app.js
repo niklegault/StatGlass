@@ -5,7 +5,7 @@ const classes = require("./classes")
 
 ////// TESTING \\\\\\
 let will = new classes.Goalie('Will', 'Legault', 13)
-let test = new classes.Game('knights', 'celtics', will, null, 3);
+let test = new classes.Game('knights', 'celtics', will, 3);
 
 test.addShotsVS();
 test.addShotsVS();
@@ -14,4 +14,4 @@ test.addGoalsVS();
 test.addShotsVS();
 
 will.addGame(test);
-console.log(will.svpc);
+console.log(will.goalsVS);
