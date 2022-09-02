@@ -9,7 +9,9 @@ let test = new classes.Game('knights', 'celtics', will, null, 3);
 
 test.addShotsVS();
 test.addShotsVS();
+test.incrementPeriod();
+test.addGoalsVS();
 test.addShotsVS();
 
 will.addGame(test);
-console.log(will.shotsVS);
+console.log(will.svpc);
