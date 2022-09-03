@@ -3,18 +3,23 @@
 // Goalie Class is used to store data about the goalie, will include games, name, age, and team
 class Goalie {
     constructor(firstName, lastName, age, team) {
+        // From Arguments
         this.firstName   = firstName;
         this.lastName    = lastName;
         this._team       = team;
         this._age        = age;
+        
+        // Stats
         this._gaa        = 0;
         this._svpc       = 0;
         this._saves      = 0;
         this._shotsVS    = 0;
         this._goalsVS    = 0;
         this._timePlayed = 0;
-        this._gameLength = _team.gameLength();
-        this._games      = []; 
+        this._games      = [];
+
+        // For Calculations
+        this._gameLength = team.gameLength;
     }
 
     // Getters
@@ -76,17 +81,25 @@ class Goalie {
 
 // Game Class is used to store data about the teams playing, the goalie, and the amount of shots, and goals per period of play
 class Game {
-    constructor(homeTeam, awayTeam, homeGoalie, periods, periodLength) {
+    constructor(homeTeam, awayTeam, homeGoalie, awayGoalie, periods, periodLength) {
+        // From Arguments
         this._homeTeam     = homeTeam;
         this._awayTeam     = awayTeam;
         this._homeGoalie   = homeGoalie;
+        this._awayGoalie   = awayGoalie;
         this.periods       = periods;
         this._periodLength = periodLength;
+        
+        // Stat Tracking
+
+        this._timePlayed   = 0;
+        
+        
         this._curPeriod    = 1;
-        this._shotsFor     = [];
-        this._shotsVS      = [];
-        this._goalsFor     = [];
-        this._goalsVS      = [];
+        this._shotsHome    = [];
+        this._shotsAway    = [];
+        this._goalsHome    = [];
+        this._goalsAway    = [];
         for(let i = 0; i < periods; i++) {
             this._shotsVS.push(0);
             this._shotsFor.push(0);
@@ -132,6 +145,7 @@ class Game {
     incrementPeriod() {
         if(this._curPeriod < this.periods) {
             this._curPeriod ++;
+            this._timePlayed += 15;
         }        
     }
 
@@ -142,7 +156,13 @@ class Game {
     }
 
     /////// Need to add feature
-    pullGoalie()
+    pullGoalie(timeOut) {
+        
+    }
+
+    returnGoalie(timeIn) {
+
+    }
 }
 
 // Team Class is used to store info about games played and each goalie belonging to the team
@@ -154,6 +174,7 @@ class Team {
         this._gameLength = gameLength;
         this._period     = periods;
         this._goalies    = [];
+        this._games      = [];
     }
 
     // Getters
