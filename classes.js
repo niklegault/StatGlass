@@ -149,7 +149,7 @@ class Game {
      * @param {BigInt} periodLength The length of each period
      */
     constructor(homeTeam, awayTeam, homeGoalie, awayGoalie, periods, periodLength) {
-        // From Arguments
+        /// From Arguments
         this._homeTeam     = homeTeam;
         this._awayTeam     = awayTeam;
         this._homeGoalie   = homeGoalie;
@@ -157,16 +157,21 @@ class Game {
         this.periods       = periods;
         this._periodLength = periodLength;
         
-        // Stat Tracking
-
-        this._timePlayed   = 0;
+        /// Stat Tracking
+        // GAA
+        this._timePlayed           = 0;
+        this._homeGoalieTimePulled = 0; // Use to subtract Goalie's time played by this amount
+        this._awayGoalieTimePulled = 0; // ^
+        this._homeGoalieTimePlayed = 0; // Will be equal to _timePlayed - _homeGoalieTimePulled
+        this._awayGoalieTimePlayed = 0; // ^
         
-        
-        this._curPeriod    = 1;
+        // SV%
         this._shotsHome    = [];
         this._shotsAway    = [];
         this._goalsHome    = [];
         this._goalsAway    = [];
+
+        this._curPeriod    = 1;
         for(let i = 0; i < periods; i++) {
             this._shotsHome.push(0);
             this._shotsAway.push(0);
