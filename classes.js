@@ -82,7 +82,7 @@ class Goalie {
 // Game Class is used to store data about the teams playing, the goalie, and the amount of shots, and goals per period of play
 class Game {
     constructor(homeTeam, awayTeam, homeGoalie, awayGoalie, periods, periodLength) {
-        // From Arguments
+        /// From Arguments
         this._homeTeam     = homeTeam;
         this._awayTeam     = awayTeam;
         this._homeGoalie   = homeGoalie;
@@ -90,16 +90,21 @@ class Game {
         this.periods       = periods;
         this._periodLength = periodLength;
         
-        // Stat Tracking
-
-        this._timePlayed   = 0;
+        /// Stat Tracking
+        // GAA
+        this._timePlayed           = 0;
+        this._homeGoalieTimePulled = 0; // Use to subtract Goalie's time played by this amount
+        this._awayGoalieTimePulled = 0; // ^
+        this._homeGoalieTimePlayed = 0; // Will be equal to _timePlayed - _homeGoalieTimePulled
+        this._awayGoalieTimePlayed = 0; // ^
         
-        
-        this._curPeriod    = 1;
+        // SV%
         this._shotsHome    = [];
         this._shotsAway    = [];
         this._goalsHome    = [];
         this._goalsAway    = [];
+
+        this._curPeriod    = 1;
         for(let i = 0; i < periods; i++) {
             this._shotsVS.push(0);
             this._shotsFor.push(0);
@@ -129,7 +134,7 @@ class Game {
     addShotsFor() {
         this._shotsFor[this._curPeriod - 1] ++;
     }
-
+    
     addShotsVS() {
         this._shotsVS[this._curPeriod - 1] ++;
     }
@@ -156,11 +161,11 @@ class Game {
     }
 
     /////// Need to add feature
-    pullGoalie(timeOut) {
+    pullGoalie(timeOut, goalieToPull) {
         
     }
 
-    returnGoalie(timeIn) {
+    returnGoalie(timeIn, goalieToReturn) {
 
     }
 }
