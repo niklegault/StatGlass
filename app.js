@@ -8,11 +8,11 @@ let knights = new classes.Team('Nepean Knights', 'U15 Lacrosse', 'Lacrosse', 45,
 let will = new classes.Goalie('Will', 'Legault', 13, knights)
 let test = new classes.Game(knights, 'celtics', will, 3, 15);
 
-test.addShotsVS();
-test.addShotsVS();
+test.addShotsAway();
+test.addShotsAway();
 test.incrementPeriod();
-test.addGoalsVS();
-test.addShotsVS();
+test.addGoalsAway();
+test.addShotsAway();
 
 will.addGame(test);
 console.log(will.goalsVS);
