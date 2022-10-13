@@ -12,7 +12,7 @@ class Goalie {
      * @param {String} firstName The first name of the goalie
      * @param {String} lastName The last name of the goalie
      * @param {BigInt} age The age of the goalie
-     * @param {Team} team The team the goalie is a member of
+     * @param {String} team The team the goalie is a member of
      */
     constructor(firstName, lastName, age, team) {
         // From Arguments
@@ -141,8 +141,8 @@ class Game {
     /**
      * @author Nik Legault
      * @constructor Creates an instance of the game class
-     * @param {Team} homeTeam The home team of the game
-     * @param {Team} awayTeam The visiting team of the game
+     * @param {String} homeTeam The home team of the game
+     * @param {String} awayTeam The visiting team of the game
      * @param {Goalie} homeGoalie The home team's goalie
      * @param {Goalie} awayGoalie The away team's goalie
      * @param {BigInt} periods The number of periods in the game
@@ -239,6 +239,38 @@ class Game {
 
     /**
      * @author Nik Legault
+     * @desc Decrements the away team's shots of the current period by 1
+     */
+     removeShotsAway() {
+        this._shotsAway[this._curPeriod - 1] --;
+    }
+
+    /**
+     * @author Nik Legault
+     * @desc Decrements the home team's shots of the current period by 1
+     */
+    removeShotsHome() {
+        this._shotsHome[this._curPeriod - 1] --;
+    }
+    
+    /**
+     * @author Nik Legault
+     * @desc Decrements the away team's goals of the current period by 1
+     */
+    removeGoalsAway() {
+        this._goalsAway[this._curPeriod - 1] --;
+    }
+
+    /**
+     * @author Nik Legault
+     * @desc Decrements the home team's goals of the current period by 1
+     */
+    removeGoalsHome() {
+        this._goalsHome[this._curPeriod - 1] --;
+    }
+
+    /**
+     * @author Nik Legault
      * @desc Increments the period and the time played
      */
     incrementPeriod() {
@@ -258,72 +290,9 @@ class Game {
             this._timePlayed -= this._periodLength;
         }
     }
-
-    /////// Need to add feature
-    /**
-     * @author Nik Legault
-     * @desc Used when the goalie is not playing to adjust the time played of the goalie
-     * @param {BigInt} timeOut The time in whole minutes (round up) that the goalie was pulled
-     * @param {Team} team The team for which to pull the goalie 
-     */
-    pullGoalie(timeOut, team) {
-        
-    }
-
-    /**
-     * @author Nik Legault
-     * @desc Used to return the goalie into play and restart tracking of time played
-     * @param {BigInt} timeIn The time in whole minutest (round up) that the goalie was returned
-     * @param {Team} team The team for which to return the goalie
-     */
-    returnGoalie(timeIn, team) {
-
-    }
 }
 
-/**
- * @author Nik Legault
- * @class
- * @classdesc The team class is used to store info about games played, and each goalie belonging to the team
- */
-class Team {
-    /**
-     * @author Nik Legault
-     * @constructor Creates a new instance of the team class
-     * @param {String} name The name of the team
-     * @param {String} league The league the team plays in
-     * @param {String} sport The sport the team plays
-     * @param {BigInt} gameLength The amount of minutes a game takes to play
-     * @param {BigInt} periods The amount of periods in a game
-     */
-    constructor(name, league, sport, gameLength, periods) {
-        this._name       = name;
-        this._league     = league;
-        this._sport      = sport;
-        this._gameLength = gameLength;
-        this._period     = periods;
-        this._goalies    = [];
-        this._games      = [];
-    }
 
-    // Getters
-    /**
-     * @returns {BigInt} The amoung of minutes a game takes to play
-     */
-    get gameLength() {
-        return this._gameLength;
-    }
-
-    // Functions
-    /**
-     * @author Nik Legault
-     * @desc Adds a goalie to the list of the team's goalies
-     * @param {Goalie} goalieToAdd The goalie that is to be added to the team
-     */
-    addGoalie(goalieToAdd) {
-        this.goalies.push(goalieToAdd);
-    }
-}
 
 /// Exporting classes
 module.exports = {
