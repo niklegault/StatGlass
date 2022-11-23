@@ -298,5 +298,4 @@ class Game {
 module.exports = {
     Goalie,
     Game,
-    Team
 };
