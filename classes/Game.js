@@ -17,6 +17,9 @@ class Game {
     static STARTER = 0;
     static BACKUP = 1;
     static EMPTY = 2;
+    static WIN = 0; // Used for editing record
+    static LOSS = 1; // Used for editing record
+    static TIE = 2; // Used for editing record
 
     /**
      * Create a new Game object with the given home and away teams,
@@ -42,7 +45,7 @@ class Game {
 
         /// Stat Tracking
         this.curPeriod = 1;
-        this.result = "";
+        this.result = Game.TIE;
 
         /// Home (stats are shots for/goals for, but ga, svpc, and gaa are of that teams goalie) [NM, HD, BW]
         // Each internal array will have values for each period
@@ -116,19 +119,19 @@ class Game {
         }
         if(this.amHome) {
             if(totalHome > totalAway) {
-                this.result += "W";
+                this.result = Game.WIN;
             } else if(totalHome < totalAway) {
-                this.result += "L";
+                this.result = Game.LOSS;
             } else {
-                this.result += "T";
+                this.result = Game.TIE;
             }
         } else {
             if(totalAway > totalHome) {
-                this.result += "W";
+                this.result = Game.WIN;
             } else if(totalAway < totalHome) {
-                this.result += "L";
+                this.result = Game.LOSS;
             } else {
-                this.result += "T";
+                this.result = Game.TIE;
             }
         }
     }
