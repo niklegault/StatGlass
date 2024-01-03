@@ -177,6 +177,51 @@ class Game {
         }
     }
 
+    /**
+     * Decrement the home team's NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeShotHome() {
+        this.shotsHome[Game.NM][this.curPeriod]--;
+        if(this.curGoalieAway === Game.STARTER) {
+            this.shotsHomeStarter[Game.NM][this.curPeriod]--;
+        } else if(this.curGoalieAway === Game.BACKUP) {
+            this.shotsHomeBackup[Game.NM][this.curPeriod]--;
+        }
+    }
+
+    /**
+     * Decrement the home team's HD and NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeHDShotHome() {
+        this.shotsHome[Game.NM][this.curPeriod]--;
+        this.shotsHome[Game.HD][this.curPeriod]--;
+        if(this.curGoalieAway === Game.STARTER) {
+            this.shotsHomeStarter[Game.NM][this.curPeriod]--;
+            this.shotsHomeStarter[Game.HD][this.curPeriod]--;
+        } else if(this.curGoalieAway === Game.BACKUP) {
+            this.shotsHomeBackup[Game.NM][this.curPeriod]--;
+            this.shotsHomeBackup[Game.HD][this.curPeriod]--;
+        }
+    }
+
+    /**
+     * Decrement the home team's BW, HD, and NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeBWShotHome() {
+        this.shotsHome[Game.NM][this.curPeriod]--;
+        this.shotsHome[Game.HD][this.curPeriod]--;
+        this.shotsHome[Game.BW][this.curPeriod]--;
+        if(this.curGoalieAway === Game.STARTER) {
+            this.shotsHomeStarter[Game.NM][this.curPeriod]--;
+            this.shotsHomeStarter[Game.HD][this.curPeriod]--;
+            this.shotsHomeStarter[Game.BW][this.curPeriod]--;
+        } else if(this.curGoalieAway === Game.BACKUP) {
+            this.shotsHomeBackup[Game.NM][this.curPeriod]--;
+            this.shotsHomeBackup[Game.HD][this.curPeriod]--;
+            this.shotsHomeBackup[Game.BW][this.curPeriod]--;
+        }
+    }
+
     /// Away Shots
     /**
      * Increment the Away team's NM shots for the corresponding goalie (Starter/Backup)
@@ -223,5 +268,49 @@ class Game {
         }
     }
 
+    /**
+     * Decrement the Away team's NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeShotAway() {
+        this.shotsAway[Game.NM][this.curPeriod]--;
+        if(this.curGoalieHome === Game.STARTER) {
+            this.shotsAwayStarter[Game.NM][this.curPeriod]--;
+        } else if(this.curGoalieHome === Game.BACKUP) {
+            this.shotsAwayBackup[Game.NM][this.curPeriod]++;
+        }
+    }
+
+    /**
+     * Decrement the Away team's HD and NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeHDShotAway() {
+        this.shotsAway[Game.NM][this.curPeriod]--;
+        this.shotsAway[Game.HD][this.curPeriod]--;
+        if(this.curGoalieHome === Game.STARTER) {
+            this.shotsAwayStarter[Game.NM][this.curPeriod]--;
+            this.shotsAwayStarter[Game.HD][this.curPeriod]--;
+        } else if(this.curGoalieHome === Game.BACKUP) {
+            this.shotsAwayBackup[Game.NM][this.curPeriod]--;
+            this.shotsAwayBackup[Game.HD][this.curPeriod]--;
+        }
+    }
+
+    /**
+     * Decrement the Away team's BW, HD, and NM shots for the corresponding goalie (Starter/Backup)
+     */
+    removeBWShotAway() {
+        this.shotsAway[Game.NM][this.curPeriod]--;
+        this.shotsAway[Game.HD][this.curPeriod]--;
+        this.shotsAway[Game.BW][this.curPeriod]--;
+        if(this.curGoalieHome === Game.STARTER) {
+            this.shotsAwayStarter[Game.NM][this.curPeriod]--;
+            this.shotsAwayStarter[Game.HD][this.curPeriod]--;
+            this.shotsAwayStarter[Game.BW][this.curPeriod]--;
+        } else if(this.curGoalieHome === Game.BACKUP) {
+            this.shotsAwayBackup[Game.NM][this.curPeriod]--;
+            this.shotsAwayBackup[Game.HD][this.curPeriod]--;
+            this.shotsAwayBackup[Game.BW][this.curPeriod]--;
+        }
+    }
 
 }
