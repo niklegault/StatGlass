@@ -68,13 +68,70 @@ class Goalie {
     }
 
     /**
-     * @TODO
-     * Update once Game is fully implemented
+     * Add a game to the goalie's record of played games
      *
-     * @param gameToAdd
+     * @param {Game} gameToAdd The game the goalie played
      */
     addGame(gameToAdd) {
-
+        this.gamesPlayed++;
+        this.games.push(gameToAdd);
+        this.seasons[gameToAdd.season].push(gameToAdd);
+        if(gameToAdd.amHome) { // Check if home or away
+            if(gameToAdd.isStarter) { // Check if goalie is the starter for their team
+                this.record[gameToAdd.result]++;
+                this.timePlayed += gameToAdd.timePlayedHome[Game.STARTER];
+                for(let i = 0; i < gameToAdd.periods; i++) {
+                    this.shots[Goalie.NM] = gameToAdd.shotsAwayStarter[Goalie.NM][i];
+                    this.shots[Goalie.HD] = gameToAdd.shotsAwayStarter[Goalie.HD][i];
+                    this.shots[Goalie.BW] = gameToAdd.shotsAwayStarter[Goalie.BW][i];
+                    this.goals[Goalie.NM] = gameToAdd.goalsAwayStarter[Goalie.NM][i];
+                    this.goals[Goalie.HD] = gameToAdd.goalsAwayStarter[Goalie.HD][i];
+                    this.goals[Goalie.BW] = gameToAdd.goalsAwayStarter[Goalie.BW][i];
+                }
+            } else {
+                if(gameToAdd.timePlayedHome[Game.BACKUP] > gameToAdd.periodLength) {
+                    this.record[gameToAdd.result]++;
+                }
+                this.timePlayed += gameToAdd.timePlayedHome[Game.BACKUP];
+                for(let i = 0; i < gameToAdd.periods; i++) {
+                    this.shots[Goalie.NM] = gameToAdd.shotsAwayBackup[Goalie.NM][i];
+                    this.shots[Goalie.HD] = gameToAdd.shotsAwayBackup[Goalie.HD][i];
+                    this.shots[Goalie.BW] = gameToAdd.shotsAwayBackup[Goalie.BW][i];
+                    this.goals[Goalie.NM] = gameToAdd.goalsAwayBackup[Goalie.NM][i];
+                    this.goals[Goalie.HD] = gameToAdd.goalsAwayBackup[Goalie.HD][i];
+                    this.goals[Goalie.BW] = gameToAdd.goalsAwayBackup[Goalie.BW][i];
+                }
+            }
+        } else { // Goalie's team is the away team
+            if(gameToAdd.isStarter) { // Check if goalie is the starter for their team
+                this.record[gameToAdd.result]++;
+                this.timePlayed += gameToAdd.timePlayedAway[Game.STARTER];
+                for(let i = 0; i < gameToAdd.periods; i++) {
+                    this.shots[Goalie.NM] = gameToAdd.shotsHomeStarter[Goalie.NM][i];
+                    this.shots[Goalie.HD] = gameToAdd.shotsHomeStarter[Goalie.HD][i];
+                    this.shots[Goalie.BW] = gameToAdd.shotsHomeStarter[Goalie.BW][i];
+                    this.goals[Goalie.NM] = gameToAdd.goalsHomeStarter[Goalie.NM][i];
+                    this.goals[Goalie.HD] = gameToAdd.goalsHomeStarter[Goalie.HD][i];
+                    this.goals[Goalie.BW] = gameToAdd.goalsHomeStarter[Goalie.BW][i];
+                }
+            } else {
+                if(gameToAdd.timePlayedAway[Game.BACKUP] > gameToAdd.periodLength) {
+                    this.record[gameToAdd.result]++;
+                }
+                this.timePlayed += gameToAdd.timePlayedAway[Game.BACKUP];
+                for(let i = 0; i < gameToAdd.periods; i++) {
+                    this.shots[Goalie.NM] = gameToAdd.shotsHomeBackup[Goalie.NM][i];
+                    this.shots[Goalie.HD] = gameToAdd.shotsHomeBackup[Goalie.HD][i];
+                    this.shots[Goalie.BW] = gameToAdd.shotsHomeBackup[Goalie.BW][i];
+                    this.goals[Goalie.NM] = gameToAdd.goalsHomeBackup[Goalie.NM][i];
+                    this.goals[Goalie.HD] = gameToAdd.goalsHomeBackup[Goalie.HD][i];
+                    this.goals[Goalie.BW] = gameToAdd.goalsHomeBackup[Goalie.BW][i];
+                }
+            }
+        }
+        this.saves = this.calcSaves();
+        this.svpc = this.calcSVPC();
+        this.gaa = this.calcGAA();
     }
 
     /**
