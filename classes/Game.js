@@ -598,4 +598,100 @@ class Game {
         this.pulledGoalieAway = Game.EMPTY;
         this.timePlayedAway[this.curGoalieAway] += timein;
     }
+
+    /// Update Stats
+    /**
+     * Calculate all the stats for home and away teams
+     */
+    updateStats() {
+        /// Home
+        this.savesHome = this.updateSaves(this.shotsAway, this.goalsAway);
+        this.gaHome = this.goalsAway;
+        this.svpcHome = this.updateSVPC(this.savesHome, this.shotsAway);
+        this.gaaHome = this.updateGAA(this.periodLength * this.periods, this.gaHome);
+
+        // Starter
+        this.savesHomeStarter = this.updateSaves(this.shotsAwayStarter, this.goalsAwayStarter);
+        this.gaHomeStarter = this.goalsAwayStarter;
+        this.svpcHomeStarter = this.updateSVPC(this.savesHomeStarter, this.shotsAwayStarter);
+        this.gaaHomeStarter = this.updateGAA(this.timePlayedHome[Game.STARTER], this.gaHomeStarter);
+
+        // Backup
+        this.savesHomeBackup = this.updateSaves(this.shotsAwayBackup, this.goalsAwayBackup);
+        this.gaHomeBackup = this.goalsAwayBackup;
+        this.svpcHomeBackup = this.updateSVPC(this.savesHomeBackup, this.shotsAwayBackup);
+        this.gaaHomeBackup = this.updateGAA(this.timePlayedHome[Game.BACKUP], this.gaHomeBackup);
+
+        /// Away
+        this.savesAway = this.updateSaves(this.shotsHome, this.goalsHome);
+        this.gaAway = this.goalsHome;
+        this.svpcAway = this.updateSVPC(this.savesAway, this.shotsHome);
+        this.gaaAway = this.updateGAA(this.periodLength * this.periods, this.gaAway);
+
+        // Starter
+        this.savesAwayStarter = this.updateSaves(this.shotsHomeStarter, this.goalsHomeStarter);
+        this.gaAwayStarter = this.goalsHomeStarter;
+        this.svpcAwayStarter = this.updateSVPC(this.savesAwayStarter, this.shotsHomeStarter);
+        this.gaaAwayStarter = this.updateGAA(this.timePlayedAway[Game.STARTER], this.gaAwayStarter);
+
+        // Backup
+        this.savesAwayBackup = this.updateSaves(this.shotsHomeBackup, this.goalsHomeBackup);
+        this.gaAwayBackup = this.goalsHomeBackup;
+        this.svpcAwayBackup = this.updateSVPC(this.savesAwayBackup, this.shotsHomeBackup);
+        this.gaaAwayBackup = this.updateGAA(this.timePlayedAway[Game.BACKUP], this.gaAwayBackup)
+
+        /// Determine result
+        this.determineResult();
+    }
+
+    /**
+     * Update the saves a goalie has made based on the shots for and goals for of the opposing team
+     *
+     * @param {BigInt[][]} shots The shots against a goalie
+     * @param {BigInt[][]} goals The goals against a goalie
+     * @returns {BigInt[][]} The amount of saves the goalie has made
+     */
+    updateSaves(shots, goals) {
+        let saves = [[], [], []];
+        saves[Game.NM] = shots[Game.NM].map((n, i) => n - goals[Game.NM][i]);
+        saves[Game.HD] = shots[Game.HD].map((n, i) => n - goals[Game.HD][i]);
+        saves[Game.BW] = shots[Game.BW].map((n, i) => n - goals[Game.BW][i]);
+        return saves;
+    }
+
+    /**
+     * Update the save percentage of a goalie based on the saves of the goalie and the shots for of the opposing team
+     *
+     * @param {BigInt[][]} saves The number of saves the goalie made
+     * @param {BigInt[][]} shots The number of shots faced by the goalie
+     * @returns {Number[][]} The save percentage of the goalie
+     */
+    updateSVPC(saves, shots) {
+        let svpc = [[], [], []];
+        svpc[Game.NM] = saves[Game.NM].map((n, i) => n / (shots[Game.NM][i] !== 0 ? shots[Game.NM][i] : 1));
+        svpc[Game.HD] = saves[Game.HD].map((n, i) => n / (shots[Game.HD][i] !== 0 ? shots[Game.HD][i] : 1));
+        svpc[Game.BW] = saves[Game.BW].map((n, i) => n / (shots[Game.BW][i] !== 0 ? shots[Game.BW][i] : 1));
+        return svpc;
+    }
+
+    /**
+     * Update the goals against average of a goalie based on the time played and goals allowed of the goalie
+     *
+     * @param {Number} timePlayed The amount of time that the goalie has played
+     * @param {BigInt[][]} goals The goals against of the goalie
+     * @returns {Number[][]} The goals against average of the goalie
+     */
+    updateGAA(timePlayed, goals) {
+        let gaa = [[], [], []];
+        gaa[Game.NM] = goals[Game.NM].map((n) => (n / timePlayed) * this.periods * this.periodLength);
+        gaa[Game.HD] = goals[Game.HD].map((n) => (n / timePlayed) * this.periods * this.periodLength);
+        gaa[Game.BW] = goals[Game.BW].map((n) => (n / timePlayed) * this.periods * this.periodLength);
+        return gaa;
+    }
+
 }
+
+/// Export Class
+module.exports = {
+    Game,
+};
