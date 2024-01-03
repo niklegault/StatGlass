@@ -53,6 +53,9 @@ class Game {
         this.svpcHome = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaHome = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.curGoalieHome = Game.STARTER;
+        this.pulledGoalieHome = Game.EMPTY;
+        this.timePlayedHome = Array(3).fill(0); // [STARTER, BACKUP, EMPTY]
+        this.timePlayedHome[Game.STARTER] = this.periodLength; // Initial time played
 
         // Home Starter (Shots vs. away team starter goalie)
         this.shotsHomeStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
@@ -61,7 +64,6 @@ class Game {
         this.gaHomeStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.svpcHomeStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaHomeStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
-        this.timePlayedHomeStarter = 0;
 
         // Home Backup (Shots vs. away team backup goalie)
         this.shotsHomeBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
@@ -70,7 +72,6 @@ class Game {
         this.gaHomeBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.svpcHomeBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaHomeBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
-        this.timePlayedHomeBackup = 0;
 
         /// Away (stats are shots for/goals for, but ga, svpc, and gaa are of that teams goalie) [NM, HD, BW]
         // Each internal array will have values for each period
@@ -81,6 +82,9 @@ class Game {
         this.svpcAway = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaAway = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.curGoalieAway = Game.STARTER;
+        this.pulledGoalieAway = Game.EMPTY;
+        this.timePlayedAway = Array(3).fill(0); // [STARTER, BACKUP, EMPTY]
+        this.timePlayedAway[Game.STARTER] = this.periodLength; // Initial time played
 
         // Away Starter (Shots vs. home team starter goalie)
         this.shotsAwayStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
@@ -89,7 +93,6 @@ class Game {
         this.gaAwayStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.svpcAwayStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaAwayStarter = Array(3).fill().map(() => Array(this.periods).fill(0));
-        this.timePlayedAwayStarter = 0;
 
         // Away Backup (Shots vs. home team backup goalie)
         this.shotsAwayBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
@@ -98,7 +101,6 @@ class Game {
         this.gaAwayBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.svpcAwayBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
         this.gaaAwayBackup = Array(3).fill().map(() => Array(this.periods).fill(0));
-        this.timePlayedAwayBackup = 0;
     }
 
     /// Functions
@@ -507,8 +509,93 @@ class Game {
         }
     }
 
+    /// Period Functions
+    /**
+     * Increment the current period and the time played for current goalies
+     */
+    incrementPeriod() {
+        this.curPeriod < this.periods ? this.curPeriod++ : this.curPeriod;
+        this.timePlayedHome[this.curGoalieHome] += this.periodLength;
+        this.timePlayedAway[this.curGoalieAway] += this.periodLength;
+    }
 
+    /**
+     * Decrement the current period and the time played for current goalies
+     */
+    decrementPeriod() {
+        this.curPeriod > 1 ? this.curPeriod-- : this.curPeriod;
+        this.timePlayedHome[this.curGoalieHome] -= this.periodLength;
+        this.timePlayedAway[this.curGoalieAway] -= this.periodLength;
+    }
 
+    /// Goalie Change Functions
+    /**
+     * Switch the home team's goalies
+     *
+     * @param {Number} timeout The time remaining in the period that the switch happened (fractional time)
+     */
+    changeHomeGoalie(timeout) {
+        this.timePlayedHome[this.curGoalieHome] -= timeout;
+        this.curGoalieHome === Game.STARTER ? this.curGoalieHome = Game.BACKUP : this.curGoalieHome = Game.STARTER;
+        this.timePlayedHome[this.curGoalieHome] += timeout;
+    }
 
+    /**
+     * Pull the home team's goalie
+     *
+     * @param {Number} timeout The time remaining in the period that the goalie was pulled (fractional time)
+     */
+    pullHomeGoalie(timeout) {
+        this.timePlayedHome[this.curGoalieHome] -= timeout;
+        this.pulledGoalieHome = this.curGoalieHome;
+        this.curGoalieHome = Game.EMPTY;
+        this.timePlayedHome[this.curGoalieHome] += timeout;
+    }
 
+    /**
+     * Return the home team's goalie
+     *
+     * @param {Number} timein The time remaining in the period that the goalie was returned (fractional time)
+     */
+    returnHomeGoalie(timein) {
+        this.timePlayedHome[this.curGoalieHome] -= timein;
+        this.curGoalieHome = this.pulledGoalieHome;
+        this.pulledGoalieHome = Game.EMPTY;
+        this.timePlayedHome[this.curGoalieHome] += timein;
+    }
+
+    /**
+     * Switch the away team's goalies
+     *
+     * @param {Number} timeout The time remaining in the period that the switch happened (fractional time)
+     */
+    changeAwayGoalie(timeout) {
+        this.timePlayedAway[this.curGoalieAway] -= timeout;
+        this.curGoalieAway === Game.STARTER ? this.curGoalieAway = Game.BACKUP : this.curGoalieAway = Game.STARTER;
+        this.timePlayedAway[this.curGoalieAway] += timeout;
+    }
+
+    /**
+     * Pull the away team's goalie
+     *
+     * @param {Number} timeout The time remaining in the period that the goalie was pulled (fractional time)
+     */
+    pullAwayGoalie(timeout) {
+        this.timePlayedAway[this.curGoalieAway] -= timeout;
+        this.pulledGoalieAway = this.curGoalieAway;
+        this.curGoalieAway = Game.EMPTY;
+        this.timePlayedAway[this.curGoalieAway] += timeout;
+    }
+
+    /**
+     * Return the away team's goalie
+     *
+     * @param {Number} timein The time remaining in the period that the goalie was returned (fractional time)
+     */
+    returnAwayGoalie(timein) {
+        this.timePlayedAway[this.curGoalieAway] -= timein;
+        this.curGoalieAway = this.pulledGoalieAway;
+        this.pulledGoalieAway = Game.EMPTY;
+        this.timePlayedAway[this.curGoalieAway] += timein;
+    }
 }
